@@ -112,7 +112,7 @@ procedure graph(k: integer);
 begin
         while winch <> #27 do
         begin
-                writeln(k);
+            
                 if k > 30000 then k:=k-1;
                 d:=GetMaxX div k;
                 mx:=round(d * 2);
@@ -154,8 +154,7 @@ procedure IntGraph;
 begin
         dx:=1;
         dy:=10;
-//        a:=-2;
-//        b:=10;
+
         gd:=detect;
         gm:=0;
         InitGraph(gd, gm, '');

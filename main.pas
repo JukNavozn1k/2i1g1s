@@ -12,37 +12,6 @@ var     menu:array[1..n] of string;
 
 procedure graph(mx,my: integer); forward;
 
-procedure arrowkeytest;
-    var ch: char;
-    y1: integer;
-        begin
-            while ch <> #27 do
-            begin
-                ch:=readkey;
-                if (ch = #75) and (y1 = 1) then
-                  graph(mx-1,my) 
-                else
-                    if (ch = #77) and (y1 = 1) then
-                   graph(mx+1,my)
-                    else
-                        if (ch = #72) and (y1 = 1) then
-                       graph(mx,my+1) 
-                        else
-                            if (ch = #80) and (y1 = 1) then
-                            graph(mx,my-1)
-                            else
-                                if (ch = #43) then
-                               graph(mx+1,my+1)
-                                else
-                                    if (ch = #45) then
-                                   graph(mx-1,my-1);
-                      
-                    y1 := 0;
-                    if ch = #0 then y1 := 1;
-
-            end;
-        end;
-
 procedure print_func;
 
 begin
@@ -142,10 +111,11 @@ end;
 
 procedure graph(mx,my: integer);
 
+var y1: integer;
+
 begin
         while winch <> #27 do
         begin
-            
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
@@ -175,13 +145,15 @@ begin
                         x1:=x1+0.001;
                         end;
                 SetColor(15);
-                //
                 winch:=wincrt.readkey;
+                if winch=#0 then y1:=1;
                 case winch of
-                #75: graph(mx-1,my); // лево
-                #77: graph(mx+1,my); // право
-                #72: graph(mx,my+1); // вверх
-                #80: graph(mx,my-1); // вниз
+                #75: if y1=1 then graph(mx-1,my); // лево
+                #77: if y1=1 then graph(mx+1,my); // право
+                #72: if y1=1 then graph(mx,my+1); // вверх
+                #80: if y1=1 then graph(mx,my-1); // вниз
+                #43: graph(mx+1,my+1);
+                #45: graph(mx-1,my-1);
                 end;
         end;
         CloseGraph;
@@ -197,7 +169,8 @@ begin
         InitGraph(gd, gm, '');
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
-        
+        mx:=20;
+        my:=20;
         m:=20;
         graph(m+20,m);
 end;

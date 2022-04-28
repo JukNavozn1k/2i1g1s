@@ -237,3 +237,5 @@ begin
         until ch=#27;
         clrscr;
 end.
+
+//унвс б йя

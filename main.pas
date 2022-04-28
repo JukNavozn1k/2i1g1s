@@ -169,8 +169,6 @@ begin
         InitGraph(gd, gm, '');
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
-        mx:=20;
-        my:=20;
         m:=20;
         graph(m+20,m);
 end;

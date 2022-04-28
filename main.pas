@@ -112,7 +112,7 @@ procedure graph(k: integer);
 begin
         while winch <> #27 do
         begin
-            
+                if k < 1 then k:=k+1;
                 if k > 30000 then k:=k-1;
                 d:=GetMaxX div k;
                 mx:=round(d * 2);

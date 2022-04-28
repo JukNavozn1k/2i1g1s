@@ -10,6 +10,8 @@ var     menu:array[1..n] of string;
         flag,check: boolean;
         s: string;
 
+procedure graph(mx,my: integer); forward;
+
 procedure arrowkeytest;
     var ch: char;
     y1: integer;

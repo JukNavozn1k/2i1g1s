@@ -107,20 +107,17 @@ begin
         fx:=x*x*x+4*x+11;
 end;
 
-procedure graph(m: integer);
+procedure graph(mx,my: integer);
 
 begin
         while winch <> #27 do
         begin
-                if m < 1 then m:=m+1;
-                if m > 30000 then m:=m-1;
-                d:=GetMaxX div m;
-                mx:=round(d * 2);
-                my:=round(d / 10);
+                // говно-код
+                
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=-3 to m do
+                for i:=-10 to m do
                 begin
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
@@ -143,8 +140,10 @@ begin
                 // отдельной процедурой
                 winch:=wincrt.readkey;
                 case winch of
-                #72: graph(m+1);
-                #80: graph(m-1);
+                #75: graph(mx-1,my); // лево
+                #77: graph(mx+1,my); // право
+                #72: graph(mx,my+1); // вверх
+                #80: graph(mx,my-1); // вниз
                 end;
         end;
         CloseGraph;
@@ -158,10 +157,11 @@ begin
         gd:=detect;
         gm:=0;
         InitGraph(gd, gm, '');
-        y0:=GetMaxY - 20;
-        x0:=GetMaxX div 6;
+        y0:=GetMaxY div 2;
+        x0:=GetMaxX div 2;
+        
         m:=20;
-        graph(m);
+        graph(m+20,m);
 end;
 
 procedure printmenu;

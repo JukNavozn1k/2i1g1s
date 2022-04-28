@@ -1,0 +1,31 @@
+ mx:=round(d * 2);
+                my:=round(d / 10);
+                ClearDevice;
+                Line(0, y0, GetMaxX-20, y0); //Ox
+                Line(x0, 20, x0, GetMaxY); //Oy
+                for i:=-3 to m do
+                begin
+                        Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
+                        Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
+                        str(dx*i, s);
+                        OutTextXY(x0+mx*i+5, y0+10, s);
+                        if i > 0 then
+                        begin
+                                str(dy*i, s);
+                                OutTextXY(x0-60, y0+my*10*(-i), s);
+                         end;
+                end;
+                x1:=a;
+                SetColor(12);
+                while x1 <= b-0.001 do
+                begin
+                        PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
+                        x1:=x1+0.01;
+                        end;
+                SetColor(15);
+                // отдельной процедурой
+                winch:=wincrt.readkey;
+                case winch of
+                #72: graph(m+1);
+                #80: graph(m-1);
+                end;

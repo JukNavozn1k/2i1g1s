@@ -107,20 +107,20 @@ begin
         fx:=x*x*x+4*x+11;
 end;
 
-procedure graph(k: integer);
+procedure graph(m: integer);
 
 begin
         while winch <> #27 do
         begin
-                if k < 1 then k:=k+1;
-                if k > 30000 then k:=k-1;
-                d:=GetMaxX div k;
+                if m < 1 then m:=m+1;
+                if m > 30000 then m:=m-1;
+                d:=GetMaxX div m;
                 mx:=round(d * 2);
                 my:=round(d / 10);
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=-3 to k do
+                for i:=-3 to m do
                 begin
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
@@ -140,10 +140,11 @@ begin
                         x1:=x1+0.01;
                         end;
                 SetColor(15);
+                // отдельной процедурой
                 winch:=wincrt.readkey;
                 case winch of
-                #72: graph(k+1);
-                #80: graph(k-1);
+                #72: graph(m+1);
+                #80: graph(m-1);
                 end;
         end;
         CloseGraph;

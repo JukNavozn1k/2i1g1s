@@ -10,6 +10,37 @@ var     menu:array[1..n] of string;
         flag,check: boolean;
         s: string;
 
+procedure arrowkeytest;
+    var ch: char;
+    y1: integer;
+        begin
+            while ch <> #27 do
+            begin
+                ch:=readkey;
+                if (ch = #75) and (y1 = 1) then
+                  graph(mx-1,my) 
+                else
+                    if (ch = #77) and (y1 = 1) then
+                   graph(mx+1,my)
+                    else
+                        if (ch = #72) and (y1 = 1) then
+                       graph(mx,my+1) 
+                        else
+                            if (ch = #80) and (y1 = 1) then
+                            graph(mx,my-1)
+                            else
+                                if (ch = #43) then
+                               graph(mx+1,my+1)
+                                else
+                                    if (ch = #45) then
+                                   graph(mx-1,my-1);
+                      
+                    y1 := 0;
+                    if ch = #0 then y1 := 1;
+
+            end;
+        end;
+
 procedure print_func;
 
 begin

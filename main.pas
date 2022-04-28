@@ -1,5 +1,5 @@
 uses    wincrt, crt, math, graph;
-const
+const 
         unsel=LightGray;
         sel=Green;
         n=4;
@@ -112,6 +112,7 @@ procedure graph(k: integer);
 begin
         while winch <> #27 do
         begin
+            
                 if k > 30000 then k:=k-1;
                 d:=GetMaxX div k;
                 mx:=round(d * 2);
@@ -234,5 +235,4 @@ begin
         until ch=#27;
         clrscr;
 end.
-
-//работаем братья
+// t

@@ -26,6 +26,8 @@
                 // отдельной процедурой
                 winch:=wincrt.readkey;
                 case winch of
-                #72: graph(m+1);
-                #80: graph(m-1);
+                #75: graph(mx-1,my);
+                #77: graph(mx+1,my);
+                #72: graph(mx,my+1);
+                #80: graph(mx,my-1);
                 end;

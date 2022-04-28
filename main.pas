@@ -1,5 +1,5 @@
 uses    wincrt, crt, math, graph;
-const
+const 
         unsel=LightGray;
         sel=Green;
         n=4;
@@ -237,3 +237,4 @@ begin
         until ch=#27;
         clrscr;
 end.
+// t

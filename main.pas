@@ -148,13 +148,17 @@ begin
                          SetColor(12);
                         PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
                         
-                       if ((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b) then begin
+                       if (((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b)) or ((x1 = a) and gflag)  then begin
                        SetColor(2);
                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
                        cache := x1;
                        end;
                         x1:=x1+0.01;
                         end;
+                if gflag then begin
+                SetColor(2);
+                Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                end;
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;

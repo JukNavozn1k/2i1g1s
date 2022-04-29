@@ -141,8 +141,10 @@ begin
                 SetColor(12);
                 while x1 <= b-0.001 do
                 begin
+                        
                         PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
-                        x1:=x1+0.001;
+                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                        x1:=x1+0.01;
                         end;
                 SetColor(15);
                 winch:=wincrt.readkey;

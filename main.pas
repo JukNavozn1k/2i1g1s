@@ -2,7 +2,7 @@ uses    wincrt, crt, math, graph;
 const 
         unsel=LightGray;
         sel=Green;
-        n=4;
+        n=5;
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,dx,dy,gd,gm,mx,my, lim: integer;
         ch,winch: char;
@@ -101,6 +101,14 @@ begin
         gotoxy(10,7);
         write('Нажмите любую клавишу для выхода в главное меню');
         readln();
+end;
+
+procedure point4;
+
+begin
+        clrscr;
+        writeln('Программа вычисляет площадь фигуры выше y=0 ограниченную кривой и выводит её график на координатную плосость с возможностью его масштабирования как по отдельным осям, так и всем вместе.');
+        readln;
 end;
 
 function fx(x: real): real;
@@ -213,7 +221,8 @@ begin
         menu[1]:='Ввод данных';
         menu[2]:='Результат вычислений';
         menu[3]:='График';
-        menu[4]:='Выход';
+        menu[4]:='О программе';
+        menu[5]:='Выход';
         point:=1;
         x:=10;
         y:=5;
@@ -256,7 +265,8 @@ begin
                                 1: point1;
                                 2: point2;
                                 3: IntGraph;
-                                4: ch:=#27;
+                                4: point4;
+                                5: ch:=#27;
                         end;
                 printmenu;
         end;

@@ -7,7 +7,7 @@ var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,dx,dy,gd,gm,mx,my, lim: integer;
         ch,winch: char;
         h,a,b,m2,x1: real;
-        flag,check: boolean;
+        flag,check,gflag: boolean;
         s: string;
 
 procedure graph(mx,my: integer); forward;
@@ -113,10 +113,10 @@ procedure graph(mx,my: integer);
 
 var y1: integer;
  cache: real;
- flag : boolean;
+
 
 begin
-        flag :=false;
+        
         while winch <> #27 do
         begin
                 
@@ -148,7 +148,7 @@ begin
                          SetColor(12);
                         PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
                         
-                       if ((x1-cache) >= round(abs(b-a)/m2)) and flag and (x1 <= b) then begin
+                       if ((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b) then begin
                        SetColor(2);
                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
                        cache := x1;
@@ -165,10 +165,10 @@ begin
                 #80: if y1=1 then graph(mx,my-1); // вниз
                 #43: graph(mx+1,my+1);
                 #45: graph(mx-1,my-1);
-                #49:flag := true;
-                #50: flag := false;
+                #49:gflag := not gflag;
                 end;
         end;
+       
         CloseGraph;
 end;
 
@@ -183,6 +183,7 @@ begin
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
         m:=20;
+        gflag := false;
         graph(m+20,m);
 end;
 

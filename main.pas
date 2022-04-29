@@ -122,15 +122,13 @@ end;
 
 procedure graph(mx,my: integer);
 
-var y1: integer;
- cache: real;
-
+var y1,m: integer;
+    cache: real;
 
 begin
-        
+        if mx > my then m:=mx else m:=my;
         while winch <> #27 do
         begin
-                
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy

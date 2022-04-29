@@ -190,6 +190,7 @@ end;
 procedure IntGraph;
 
 begin
+        if flag=false then point1;
         dx:=1;
         dy:=10;
         gd:=detect;
@@ -199,7 +200,7 @@ begin
         x0:=GetMaxX div 2;
         m:=20;
         gflag := false;
-        graph(m+20,m);
+        graph(m+20,m-15);
 end;
 
 procedure printmenu;

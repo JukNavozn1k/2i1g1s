@@ -112,11 +112,14 @@ end;
 procedure graph(mx,my: integer);
 
 var y1: integer;
-var cache: real;
+ cache: real;
+ flag : boolean;
 
 begin
+        flag :=false;
         while winch <> #27 do
         begin
+                
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
@@ -144,8 +147,9 @@ begin
                 begin
                          SetColor(12);
                         PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
-                        SetColor(2);
-                       if (x1-cache) >= 0.7 then begin  
+                        
+                       if ((x1-cache) >= round(abs(b-a)/m2)) and flag and (x1 <= b) then begin
+                       SetColor(2);
                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
                        cache := x1;
                        end;
@@ -161,6 +165,8 @@ begin
                 #80: if y1=1 then graph(mx,my-1); // вниз
                 #43: graph(mx+1,my+1);
                 #45: graph(mx-1,my-1);
+                #49:flag := true;
+                #50: flag := false;
                 end;
         end;
         CloseGraph;

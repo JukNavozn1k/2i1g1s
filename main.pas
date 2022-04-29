@@ -112,6 +112,7 @@ end;
 procedure graph(mx,my: integer);
 
 var y1: integer;
+var cache: real;
 
 begin
         while winch <> #27 do
@@ -138,12 +139,16 @@ begin
                          end;
                 end;
                 x1:=a;
-                SetColor(12);
+                cache := a;
                 while x1 <= b-0.001 do
                 begin
-                        
+                         SetColor(12);
                         PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
-                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                        SetColor(2);
+                       if (x1-cache) >= 0.7 then begin  
+                       Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                       cache := x1;
+                       end;
                         x1:=x1+0.01;
                         end;
                 SetColor(15);

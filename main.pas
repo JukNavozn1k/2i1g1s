@@ -112,9 +112,9 @@ procedure point4;
 
 begin
         clrscr;
-        gotoxy(10,8);
+        gotoxy(10,5);
         writeln('Программа вычисляет площадь фигуры выше y=0 ограниченную кривой и выводит её график на координатную плосость с возможностью его масштабирования как по отдельным осям, так и всем вместе.');
-        gotoxy(10,9);
+        gotoxy(10,6);
         write('Нажмите клавишу <Enter> для выходв в главное меню ');
         readln;
 end;
@@ -131,6 +131,7 @@ var y1,m: integer;
     cache: real;
 
 begin
+        winch:=' ';
         if mx > my then m:=mx else m:=my;
         if mx > 30000 then mx := mx -1;
         if mx < 30 then mx := mx + 1;
@@ -141,7 +142,7 @@ begin
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=1 to m do
+                for i:=1 to 100 do
                 begin
                         // P.S сделать ограничения нормальные (метод научного тыка)
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
@@ -182,12 +183,10 @@ begin
                 #80: if y1=1 then graph(mx,my-1); // вниз
                 #43: graph(mx+1,my+1);
                 #45: graph(mx-1,my-1);
-                #49:gflag := not gflag;
+                #49: gflag := not gflag;
                 end;
         end;
-       
         CloseGraph;
-        RestoreCrtMode;
 end;
 
 procedure IntGraph;
@@ -201,9 +200,8 @@ begin
         InitGraph(gd, gm, '');
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
-        m:=20;
-        gflag := false;
-        graph(m+20,m-20);
+        gflag:=false;
+        graph(40,0);
 end;
 
 procedure printmenu;

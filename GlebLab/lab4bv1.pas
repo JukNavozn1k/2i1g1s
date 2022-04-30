@@ -11,7 +11,7 @@ var     menu:array[1..n] of string;
         s: string;
         divisor: integer;
 
-procedure graph(mx,my: integer); forward;
+procedure graph(mx,my:integer;scaleX,scaleY:real); forward;
 
 
 procedure print_func;
@@ -136,18 +136,19 @@ end;
 
 
 
-procedure graph(mx,my: integer);
+procedure graph(mx,my:integer;scaleX,scaleY:real);
 
 var y1,m: integer;
     cache: real;
 
 begin
         winch:=' ';
-        if mx > my then m:=mx else m:=my;
+        // ненужный код ненужного говна
+       { if mx > my then m:=mx else m:=my;
         if mx > 30000 then mx := mx -1;
         if mx < 30 then mx := mx + 1;
         if my > 30000 then my := my -1;
-        if my < 1 then my := my + 1;
+        if my < 1 then my := my + 1; }
         while winch <> #27 do
         begin
                 ClearDevice;
@@ -157,27 +158,45 @@ begin
                 OutTextXY(100,140,'scale +y - UpArrow');
                 OutTextXY(100,160,'scale -y -DownArrow');
                 OutTextXY(100,180,'scale +x +y -*');
-                 OutTextXY(100,200,'scale -x -y -/');
-                OutTextXY(x0-10,y0-10,'0');
+                OutTextXY(100,200,'scale -x -y -/');
+              
                  // обозначение осей
                  OutTextXY(GetMaxX-20,y0-20,'X');
                 OutTextXY(x0+20,20,'Y');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i := 0 to 20 do 
+                for i := 0 to 10 do 
                 begin
-                
+                        // Засечки,деления,скейл,сжатие,расстяжение OY
+                        Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
+                        Line(x0-round(mx*i), y0-3, x0-round(mx*i), y0+3);
+                        str(scaleX*dx*i:0:0, s);
+                        OutTextXY(x0+mx*i+5, y0+10, s);
+                        str(scaleX*-1*dx*i:0:0, s);
+                        OutTextXY(x0-mx*i+5, y0+10, s);
+                end;
+                for i := 1 to 10 do 
+                begin
+                // Засечки,деления,скейл,сжатие,расстяжение OY
+                 Line(x0-3, y0-round(my*i), x0+3, y0-round(my*i));
+                 Line(x0-3, y0+round(my*i), x0+3, y0+round(my*i));
+                 str(scaleY*dy*i:0:0, s);
+                 OutTextXY(x0-60, y0+my*(-i), s);
+                 str(scaleY-1*dy*i:0:0, s);
+                 OutTextXY(x0-60, y0-my*(-i), s);
                 end;
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then graph(mx-1,my); // лево
-                #77: if y1=1 then graph(mx+1,my); // право
-                #72: if y1=1 then graph(mx,my+1); // вверх
-                #80: if y1=1 then graph(mx,my-1); // вниз
-                #43: graph(mx+1,my+1);
-                #45: graph(mx-1,my-1);
+                #75: if y1=1 then graph(mx-1,my,scaleX,scaleY); // +zoomX
+                #77: if y1=1 then graph(mx+1,my,scaleX,scaleY); // -zoomX
+                #72: if y1=1 then graph(mx,my+1,scaleX,scaleY); // -zoomY
+                #80: if y1=1 then graph(mx,my-1,scaleX,scaleY); // +zoomY
+                #43: graph(mx+1,my+1,scaleX,scaleY);
+                #45: graph(mx-1,my-1,scaleX,scaleY);
+                #42:graph(mx,my,scaleX*2,scaleX);
+                #47:graph(mx,my,scaleX/2,scaleY);
                 #49: gflag := not gflag;
                 end;
         end;
@@ -200,7 +219,7 @@ begin
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
         gflag:=false;
-        graph(40,5);
+        graph(40,40,1,1);
 end;
 
 procedure printmenu;

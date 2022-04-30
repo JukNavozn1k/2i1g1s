@@ -158,6 +158,7 @@ begin
                 OutTextXY(100,160,'scale -y -DownArrow');
                 OutTextXY(100,180,'scale +x +y -*');
                  OutTextXY(100,200,'scale -x -y -/');
+                OutTextXY(x0-10,y0-10,'0');
                  // обозначение осей
                  OutTextXY(GetMaxX-20,y0-20,'X');
                   OutTextXY(x0+20,20,'Y');
@@ -185,6 +186,7 @@ begin
                         
                        if (((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b)) or ((x1 = a) and gflag)  then begin
                        SetColor(2);
+                       writeln(y0-round(fx(x1)*my));
                        Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
                        cache := x1;
                        end;

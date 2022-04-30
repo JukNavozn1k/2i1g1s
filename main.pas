@@ -6,7 +6,7 @@ const
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,dx,dy,gd,gm,mx,my, lim: integer;
         ch,winch: char;
-        h,a,b,m2,x1: real;
+        h,a,b,m2,x1,E,S1,S2: real;
         flag,check,gflag: boolean;
         s: string;
 
@@ -15,7 +15,7 @@ procedure graph(mx,my: integer); forward;
 procedure print_func;
 
 begin
-        write('f(x)=x^3+0*x^2+4*x+11');
+        write('f(x)=X^3+0*x^2+4*x+11');
 end;
 
 function f(l: real): real;
@@ -92,13 +92,18 @@ begin
         if flag <> true then
                 point1;
         clrscr;
+        S1:=f(b)-f(a);
+        S2:=LT(a,b,m);
+        E:=S1-S2;
         print_func;
         gotoxy(10,5);
         write('Результат: ');
-        writeln(LT(a,b,m):5:2);
+        writeln(S2:5:2);
         gotoxy(10,6);
-        writeln('Погрешность: ', f(b)-f(a)-LT(a,b,m):5:2);
+        writeln('Абсолютная погрешность: ', E:5:2);
         gotoxy(10,7);
+        writeln('Относительная прогрешность: ', (E/S1)*100:5:0, '%');
+        gotoxy(10,8);
         write('Нажмите любую клавишу для выхода в главное меню');
         readln();
 end;
@@ -127,19 +132,18 @@ var y1,m: integer;
 
 begin
         if mx > my then m:=mx else m:=my;
+        if mx > 30000 then mx := mx -1;
+        if mx < 30 then mx := mx + 1;
+        if my > 30000 then my := my -1;
+        if my < 1 then my := my + 1;
         while winch <> #27 do
         begin
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=-10 to m do
+                for i:=1 to m do
                 begin
                         // P.S сделать ограничения нормальные (метод научного тыка)
-                        if mx > 30000 then mx := mx -1;
-                        if mx < 30 then mx := mx + 1;
-                        if my > 30000 then my := my -1;
-                        if my < 1 then my := my + 1;
-                        
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
                         str(dx*i, s);
@@ -183,6 +187,7 @@ begin
         end;
        
         CloseGraph;
+        RestoreCrtMode;
 end;
 
 procedure IntGraph;
@@ -198,7 +203,7 @@ begin
         x0:=GetMaxX div 2;
         m:=20;
         gflag := false;
-        graph(m+20,m-15);
+        graph(m+20,m-20);
 end;
 
 procedure printmenu;

@@ -143,6 +143,8 @@ var y1,m: integer;
 
 begin
         winch:=' ';
+        if (scaleX < 1) then scaleX := 1;
+        if (scaleY < 1) then scaleY := 1;
         // ненужный код ненужного говна
        { if mx > my then m:=mx else m:=my;
         if mx > 30000 then mx := mx -1;
@@ -153,12 +155,12 @@ begin
         begin
                 ClearDevice;
                 // INFO hotkeys
-                OutTextXY(100,100,'scale +x - RightArrow');
-                OutTextXY(100,120,'scale -x -LeftArrow');
-                OutTextXY(100,140,'scale +y - UpArrow');
-                OutTextXY(100,160,'scale -y -DownArrow');
-                OutTextXY(100,180,'scale +x +y -*');
-                OutTextXY(100,200,'scale -x -y -/');
+                OutTextXY(100,100,'zoom +x - RightArrow');
+                OutTextXY(100,120,'zoom -x -LeftArrow');
+                OutTextXY(100,140,'zoom +y - UpArrow');
+                OutTextXY(100,160,'zoom -y -DownArrow');
+                OutTextXY(100,180,'zoom +x +y -+');
+                OutTextXY(100,200,'zoom -x -y --');
               
                  // обозначение осей
                  OutTextXY(GetMaxX-20,y0-20,'X');
@@ -185,6 +187,26 @@ begin
                  str(scaleY-1*dy*i:0:0, s);
                  OutTextXY(x0-60, y0-my*(-i), s);
                 end;
+                // Рисование графика
+                x1:=a;
+                cache := a;
+                while x1 <= b-0.001 do
+                begin
+                         SetColor(12);
+                        PutPixel(x0+round(x1*mx*scaleX), (y0-round(fx(x1)*my)), 12);
+                        
+                       if (((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b)) or ((x1 = a) and gflag)  then begin
+                       SetColor(2);
+                       writeln(y0-round(fx(x1)*my));
+                       Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                       cache := x1;
+                       end;
+                        x1:=x1+0.01;
+                        end;
+                if gflag then begin
+                SetColor(2);
+                Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                end;
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
@@ -195,7 +217,7 @@ begin
                 #80: if y1=1 then graph(mx,my-1,scaleX,scaleY); // +zoomY
                 #43: graph(mx+1,my+1,scaleX,scaleY);
                 #45: graph(mx-1,my-1,scaleX,scaleY);
-                #42:graph(mx,my,scaleX*2,scaleX);
+                #42:graph(mx,my,scaleX*2,scaleY);
                 #47:graph(mx,my,scaleX/2,scaleY);
                 #49: gflag := not gflag;
                 end;

@@ -151,11 +151,13 @@ begin
         while winch <> #27 do
         begin
                 ClearDevice;
-                // INFO
+                // INFO hotkeys
                 OutTextXY(100,100,'scale +x - RightArrow');
                 OutTextXY(100,120,'scale -x -LeftArrow');
                 OutTextXY(100,140,'scale +y - UpArrow');
                 OutTextXY(100,160,'scale -y -DownArrow');
+                OutTextXY(100,180,'scale +x +y -*');
+                 OutTextXY(100,200,'scale -x -y -/');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
                 for i:=1 to 100 do

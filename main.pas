@@ -201,7 +201,7 @@ begin
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
         gflag:=false;
-        graph(40,0);
+        graph(40,5);
 end;
 
 procedure printmenu;

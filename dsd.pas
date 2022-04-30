@@ -24,10 +24,10 @@ function fx(x: real): real;
 begin
         fx:=2*x*x*x - 2*x*x + x*x;
 end;
-function f(l: real): real;
+function f(x: real): real;
 
 begin
-        f:=0.5*power(l,4) - ((2*power(l,2))/3) + power(l,2)/2;
+        f:=(x*x*x*x)/2 - (x*x*x)*(2/3) + (x*x)/2;
 end;
 
 
@@ -94,6 +94,7 @@ begin
                 i:=i+1;
                 write('¬ведите шаг (от 1 до 32767): ');
                 read(m2);
+                
         end;
         m:=trunc(m2);
         flag:=true;
@@ -105,6 +106,7 @@ begin
         if flag <> true then
                 point1;
         clrscr;
+        // s1-s2 абсолютна€ 
         S1:=f(b)-f(a);
         S2:=LT(a,b,m);
         E:=S2-S1;
@@ -292,4 +294,3 @@ begin
         until ch=#27;
         clrscr;
 end.
-// sdaasd

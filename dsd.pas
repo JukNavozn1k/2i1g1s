@@ -9,6 +9,7 @@ var     menu:array[1..n] of string;
         h,a,b,m2,x1,E,S1,S2: real;
         flag,check,gflag: boolean;
         s: string;
+        divisor: integer;
 
 procedure graph(mx,my: integer); forward;
 
@@ -21,7 +22,7 @@ end;
 function fx(x: real): real;
 
 begin
-        fx:=2*power(x,3) - 2*power(x,2) + x;
+        fx:=2*x*x*x - 2*x*x + x*x;
 end;
 function f(l: real): real;
 
@@ -291,3 +292,4 @@ begin
         until ch=#27;
         clrscr;
 end.
+// sdaasd

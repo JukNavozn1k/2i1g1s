@@ -102,13 +102,9 @@ begin
         gotoxy(10,6);
         writeln('Абсолютная погрешность: ', E:5:2);
         gotoxy(10,7);
-<<<<<<< HEAD
         writeln('Относительная прогрешность: ', (E/S1)*100:5:0, '%');
         gotoxy(10,8);
         write('Нажмите любую клавишу для выхода в главное меню');
-=======
-        write('Нажмите клавишу <Enter> для выходв в главное меню ');
->>>>>>> 7e04c733799527a171f527ab2d756d6b5ca0e705
         readln();
 end;
 
@@ -148,14 +144,6 @@ begin
                 for i:=1 to m do
                 begin
                         // P.S сделать ограничения нормальные (метод научного тыка)
-<<<<<<< HEAD
-=======
-                        if mx > 150 then mx := mx -1; // lock scalex
-                        if mx < 30 then mx := mx + 1;
-                        if my > 15 then my := my -1; //lock scaley
-                        if my < 1 then my := my + 1;
-                        
->>>>>>> 7e04c733799527a171f527ab2d756d6b5ca0e705
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
                         str(dx*i, s);

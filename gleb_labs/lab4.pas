@@ -6,7 +6,7 @@ const
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,dx,dy,gd,gm,mx,my, lim: integer;
         ch,winch: char;
-        h,a,b,m2,x1,E,S1,S2: real;
+        h,a,b,m2,x1: real;
         flag,check,gflag: boolean;
         s: string;
 
@@ -15,29 +15,29 @@ procedure graph(mx,my: integer); forward;
 procedure print_func;
 
 begin
-        write('f(x)=X^3+0*x^2+4*x+11');
+        write('f(x)=x^3-2x^2+x');
 end;
 
 function f(l: real): real;
 
 begin
-        f:=power(l,4)/4+2*power(l,2)+11*l;
+        f:=(power(l,4)/2)-((2/3)*power(l,3))+power(l,2)*0.5;
 end;
 
-function LT(a,b: real; m: integer): real;
-
-var     i: integer;
-        s,l: real;
-
+function LT(a,b: real; n: integer): real;
+var
+s,h1,x:real;
+i:integer;
 begin
-        l:=a;
-        h:=(b-a)/m;
-        for i:=0 to m-1 do
-        begin
-                s:=s+power(l,3)+0*power(l,2)+4*l+11;
-                l:=l+h;
-        end;
-        LT:=s*h;
+ s := 0;
+ h1 := (b-a) / n;
+ for i := 1 to n do
+  begin
+   s := s+h1*f(a+i*h1);
+   if s < 0 then
+    s := 0;
+  end;
+ LT := s;
 end;
 
 procedure point1;
@@ -87,28 +87,22 @@ begin
 end;
 
 procedure point2;
-
+var absolute_error,relative_error:real;
 begin
         if flag <> true then
                 point1;
         clrscr;
-        S1:=f(b)-f(a);
-        S2:=LT(a,b,m);
-        E:=S1-S2;
         print_func;
         gotoxy(10,5);
-        write('Результат: ');
-        writeln(S2:5:2);
+        write('S: ');
+        writeln(LT(a,b,m):5:2);
         gotoxy(10,6);
-        writeln('Абсолютная погрешность: ', E:5:2);
+        absolute_error := LT(a,b,m)-(f(b)-f(a));
+        relative_error := abs((absolute_error/(f(b)-f(a)))*100);
+        writeln('Absolute error: ',absolute_error:5:2,' Relative error: ',relative_error:5:2,' %');
+      
         gotoxy(10,7);
-<<<<<<< HEAD
-        writeln('Относительная прогрешность: ', (E/S1)*100:5:0, '%');
-        gotoxy(10,8);
-        write('Нажмите любую клавишу для выхода в главное меню');
-=======
         write('Нажмите клавишу <Enter> для выходв в главное меню ');
->>>>>>> 7e04c733799527a171f527ab2d756d6b5ca0e705
         readln();
 end;
 
@@ -136,26 +130,19 @@ var y1,m: integer;
 
 begin
         if mx > my then m:=mx else m:=my;
-        if mx > 30000 then mx := mx -1;
-        if mx < 30 then mx := mx + 1;
-        if my > 30000 then my := my -1;
-        if my < 1 then my := my + 1;
         while winch <> #27 do
         begin
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=1 to m do
+                for i:=-10 to m do
                 begin
                         // P.S сделать ограничения нормальные (метод научного тыка)
-<<<<<<< HEAD
-=======
                         if mx > 150 then mx := mx -1; // lock scalex
                         if mx < 30 then mx := mx + 1;
                         if my > 15 then my := my -1; //lock scaley
                         if my < 1 then my := my + 1;
                         
->>>>>>> 7e04c733799527a171f527ab2d756d6b5ca0e705
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
                         str(dx*i, s);
@@ -199,7 +186,6 @@ begin
         end;
        
         CloseGraph;
-        RestoreCrtMode;
 end;
 
 procedure IntGraph;
@@ -215,7 +201,7 @@ begin
         x0:=GetMaxX div 2;
         m:=20;
         gflag := false;
-        graph(m+20,m-20);
+        graph(m+20,m-15);
 end;
 
 procedure printmenu;

@@ -6,7 +6,7 @@ const
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,dx,dy,gd,gm,mx,my, lim: integer;
         ch,winch: char;
-        h,a,b,m2,x1: real;
+        h,a,b,m2,x1,E,S1,S2: real;
         flag,check,gflag: boolean;
         s: string;
 
@@ -15,29 +15,29 @@ procedure graph(mx,my: integer); forward;
 procedure print_func;
 
 begin
-        write('f(x)=x^3-2x^2+x');
+        write('f(x)=X^3+0*x^2+4*x+11');
 end;
 
 function f(l: real): real;
 
 begin
-        f:=(power(l,4)/2)-((2/3)*power(l,3))+power(l,2)*0.5;
+        f:=power(l,4)/4+2*power(l,2)+11*l;
 end;
 
-function LT(a,b: real; n: integer): real;
-var
-s,h1,x:real;
-i:integer;
+function LT(a,b: real; m: integer): real;
+
+var     i: integer;
+        s,l: real;
+
 begin
- s := 0;
- h1 := (b-a) / n;
- for i := 1 to n do
-  begin
-   s := s+h1*f(a+i*h1);
-   if s < 0 then
-    s := 0;
-  end;
- LT := s;
+        l:=a;
+        h:=(b-a)/m;
+        for i:=0 to m-1 do
+        begin
+                s:=s+power(l,3)+0*power(l,2)+4*l+11;
+                l:=l+h;
+        end;
+        LT:=s*h;
 end;
 
 procedure point1;
@@ -87,22 +87,24 @@ begin
 end;
 
 procedure point2;
-var absolute_error,relative_error:real;
+
 begin
         if flag <> true then
                 point1;
         clrscr;
+        S1:=f(b)-f(a);
+        S2:=LT(a,b,m);
+        E:=S1-S2;
         print_func;
         gotoxy(10,5);
-        write('S: ');
-        writeln(LT(a,b,m):5:2);
+        write('Результат: ');
+        writeln(S2:5:2);
         gotoxy(10,6);
-        absolute_error := LT(a,b,m)-(f(b)-f(a));
-        relative_error := abs((absolute_error/(f(b)-f(a)))*100);
-        writeln('Absolute error: ',absolute_error:5:2,' Relative error: ',relative_error:5:2,' %');
-      
+        writeln('Абсолютная погрешность: ', E:5:2);
         gotoxy(10,7);
-        write('Нажмите клавишу <Enter> для выходв в главное меню ');
+        writeln('Относительная прогрешность: ', (E/S1)*100:5:0, '%');
+        gotoxy(10,8);
+        write('Нажмите любую клавишу для выхода в главное меню');
         readln();
 end;
 
@@ -110,9 +112,9 @@ procedure point4;
 
 begin
         clrscr;
-        gotoxy(10,8);
+        gotoxy(10,5);
         writeln('Программа вычисляет площадь фигуры выше y=0 ограниченную кривой и выводит её график на координатную плосость с возможностью его масштабирования как по отдельным осям, так и всем вместе.');
-        gotoxy(10,9);
+        gotoxy(10,6);
         write('Нажмите клавишу <Enter> для выходв в главное меню ');
         readln;
 end;
@@ -129,20 +131,20 @@ var y1,m: integer;
     cache: real;
 
 begin
+        winch:=' ';
         if mx > my then m:=mx else m:=my;
+        if mx > 30000 then mx := mx -1;
+        if mx < 30 then mx := mx + 1;
+        if my > 30000 then my := my -1;
+        if my < 1 then my := my + 1;
         while winch <> #27 do
         begin
                 ClearDevice;
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=-10 to m do
+                for i:=1 to 100 do
                 begin
                         // P.S сделать ограничения нормальные (метод научного тыка)
-                        if mx > 150 then mx := mx -1; // lock scalex
-                        if mx < 30 then mx := mx + 1;
-                        if my > 15 then my := my -1; //lock scaley
-                        if my < 1 then my := my + 1;
-                        
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
                         str(dx*i, s);
@@ -181,10 +183,9 @@ begin
                 #80: if y1=1 then graph(mx,my-1); // вниз
                 #43: graph(mx+1,my+1);
                 #45: graph(mx-1,my-1);
-                #49:gflag := not gflag;
+                #49: gflag := not gflag;
                 end;
         end;
-       
         CloseGraph;
 end;
 
@@ -199,9 +200,8 @@ begin
         InitGraph(gd, gm, '');
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
-        m:=20;
-        gflag := false;
-        graph(m+20,m-15);
+        gflag:=false;
+        graph(40,5);
 end;
 
 procedure printmenu;

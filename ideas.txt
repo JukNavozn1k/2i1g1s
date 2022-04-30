@@ -73,3 +73,15 @@ begin
         end;
         CloseGraph;
 end;
+
+бинды
+ if winch=#0 then y1:=1;
+                case winch of
+                #75: if y1=1 then graph(mx-1,my); // лево
+                #77: if y1=1 then graph(mx+1,my); // право
+                #72: if y1=1 then graph(mx,my+1); // вверх
+                #80: if y1=1 then graph(mx,my-1); // вниз
+                #43: graph(mx+1,my+1);
+                #45: graph(mx-1,my-1);
+                #49: gflag := not gflag;
+                end;

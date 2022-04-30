@@ -161,40 +161,12 @@ begin
                 OutTextXY(x0-10,y0-10,'0');
                  // обозначение осей
                  OutTextXY(GetMaxX-20,y0-20,'X');
-                  OutTextXY(x0+20,20,'Y');
+                OutTextXY(x0+20,20,'Y');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i:=1 to 100 do
+                for i := 0 to 20 do 
                 begin
-                        // P.S сделать ограничения нормальные (метод научного тыка)
-                        Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
-                        Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
-                        str(dx*i, s);
-                        OutTextXY(x0+mx*i+5, y0+10, s);
-                        if i > 0 then
-                        begin
-                                str(dy*i, s);
-                                OutTextXY(x0-60, y0+my*10*(-i), s);
-                         end;
-                end;
-                x1:=a;
-                cache := a;
-                while x1 <= b-0.001 do
-                begin
-                         SetColor(12);
-                        PutPixel(x0+round(x1*mx), (y0-round(fx(x1)*my)), 12);
-                        
-                       if (((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b)) or ((x1 = a) and gflag)  then begin
-                       SetColor(2);
-                       writeln(y0-round(fx(x1)*my));
-                       Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
-                       cache := x1;
-                       end;
-                        x1:=x1+0.01;
-                        end;
-                if gflag then begin
-                SetColor(2);
-                Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
+                
                 end;
                 SetColor(15);
                 winch:=wincrt.readkey;
@@ -215,6 +187,10 @@ end;
 procedure IntGraph;
 
 begin
+        // убрать на релизе
+        flag := true;
+        a := 0; b := 5; m2 := 10;
+        // всё что между этими строчками
         if flag=false then point1;
         dx:=1;
         dy:=10;

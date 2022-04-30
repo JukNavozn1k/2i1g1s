@@ -158,6 +158,9 @@ begin
                 OutTextXY(100,160,'scale -y -DownArrow');
                 OutTextXY(100,180,'scale +x +y -*');
                  OutTextXY(100,200,'scale -x -y -/');
+                 // обозначение осей
+                 OutTextXY(GetMaxX-20,y0-20,'X');
+                  OutTextXY(x0+20,20,'Y');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
                 for i:=1 to 100 do

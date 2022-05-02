@@ -296,3 +296,4 @@ begin
         until ch=#27;
         clrscr;
 end.
+// wooow

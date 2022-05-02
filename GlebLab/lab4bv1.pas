@@ -190,10 +190,19 @@ begin
                 y := 0;
                 while x < x0 do 
                 begin
+                      // Рисование основной функции  
                       if round(y0-(y/(dy))) > 0 then begin
                       PutPixel(x0+round((sx/sy)*(x/(dx))),round(y0-(y/(dy))),12);
                       PutPixel(x0-round((sx/sy)*(x/(dx))),round(y0+(y/(dy))),12); 
+                      // Рисование штриховки x0+round((sx/sy)*(x/(dx))) and gflag
+                     { if (x0+round((sx/sy)*(x/(dx))) >= a) and (x0+round((sx/sy)*(x/(dx))) <= b) then 
+                      begin
+                        SetColor(15);
+                        Line(x0+round((sx/sy)*(x/(dx))),y0,x0+round((sx/sy)*(x/(dx))),round(y0-(y/(dy))));
+                        SetColor(12);
+                      end; }
                       end;
+                     
                       x := x + 0.1;
                       y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)
                 end;
@@ -216,6 +225,7 @@ end;
 procedure IntGraph;
 
 begin
+       
         if flag=false then point1;
         dx:=0.1;
         dy:=10;

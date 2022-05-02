@@ -138,7 +138,7 @@ procedure graph(mx,my:integer);
 
 var y1,m: integer;
     cache: real;
-
+    start,stop : real;
 begin
         winch:=' ';
          
@@ -186,7 +186,7 @@ begin
                  OutTextXY(x0-60, y0-(GetMaxY div 20)*-i, s);
                 end;
                 // График
-                
+               
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;

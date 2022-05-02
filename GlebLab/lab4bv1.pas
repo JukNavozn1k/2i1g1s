@@ -9,9 +9,7 @@ var     menu:array[1..n] of string;
         h,a,b,m2,x1,E,S1,S2: real;
         flag,check,gflag: boolean;
         s: string;
-        divisor: integer;
-
-procedure graph(mx,my:integer;scaleX,scaleY:real); forward;
+procedure graph(mx,my:integer); forward;
 
 
 procedure print_func;
@@ -136,89 +134,69 @@ end;
 
 
 
-procedure graph(mx,my:integer;scaleX,scaleY:real);
+procedure graph(mx,my:integer);
 
 var y1,m: integer;
     cache: real;
 
 begin
         winch:=' ';
-        if (scaleX < 1) then scaleX := 1;
-        if (scaleY < 1) then scaleY := 1;
-        // ненужный код ненужного говна
-       { if mx > my then m:=mx else m:=my;
-        if mx > 30000 then mx := mx -1;
-        if mx < 30 then mx := mx + 1;
-        if my > 30000 then my := my -1;
-        if my < 1 then my := my + 1; }
+         
         while winch <> #27 do
         begin
+                if my < 0 then my := my+10;
+                if mx < 0 then mx := mx + 1;
                 ClearDevice;
                 // INFO hotkeys
-                OutTextXY(100,100,'zoom +x - RightArrow');
-                OutTextXY(100,120,'zoom -x -LeftArrow');
-                OutTextXY(100,140,'zoom +y - UpArrow');
-                OutTextXY(100,160,'zoom -y -DownArrow');
+                OutTextXY(100,100,'zoom -x - RightArrow');
+                OutTextXY(100,120,'zoom +x -LeftArrow');
+                OutTextXY(100,140,'zoom -y - UpArrow');
+                OutTextXY(100,160,'zoom +y -DownArrow');
                 OutTextXY(100,180,'zoom +x +y -+');
                 OutTextXY(100,200,'zoom -x -y --');
-              
-                 // обозначение осей
+                // Вывод основной информации на график
+                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,'Absolute error:');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,'Relative error:');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 40,'Interval:');
+                 // обозначение осей,точки 0
                  OutTextXY(GetMaxX-20,y0-20,'X');
-                OutTextXY(x0+20,20,'Y');
+                 OutTextXY(x0+20,20,'Y');
+                 OutTextXY(x0-20,y0+10,'0');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                for i := 0 to 10 do 
+                for i := 1 to 5 do 
                 begin
-                        // Засечки,деления,скейл,сжатие,расстяжение OY
-                        Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
-                        Line(x0-round(mx*i), y0-3, x0-round(mx*i), y0+3);
-                        str(scaleX*dx*i:0:0, s);
-                        OutTextXY(x0+mx*i+5, y0+10, s);
-                        str(scaleX*-1*dx*i:0:0, s);
-                        OutTextXY(x0-mx*i+5, y0+10, s);
+                        // Засечки,деления,скейл,сжатие,расстяжение OX
+                        Line(x0+round((GetMaxX div 12)*i), y0-3, x0+round((GetMaxX div 12)*i), y0+3);
+                        Line(x0-round((GetMaxX div 12)*i), y0-3, x0-round((GetMaxX div 12)*i), y0+3);
+                        str((dx*i)+mx, s);
+                        OutTextXY(x0+(GetMaxX div 12)*i+5, y0+10, s);
+                        str(-mx+-1*dx*i, s);
+                        OutTextXY(x0-(GetMaxX div 12)*i+5, y0+10, s);
                 end;
                 for i := 1 to 10 do 
                 begin
                 // Засечки,деления,скейл,сжатие,расстяжение OY
-                 Line(x0-3, y0-round(my*i), x0+3, y0-round(my*i));
-                 Line(x0-3, y0+round(my*i), x0+3, y0+round(my*i));
-                 str(scaleY*dy*i:0:0, s);
-                 OutTextXY(x0-60, y0+my*(-i), s);
-                 str(scaleY-1*dy*i:0:0, s);
-                 OutTextXY(x0-60, y0-my*(-i), s);
+                 Line(x0-3, y0-(GetMaxY div 20)*i, x0+3, y0-(GetMaxY div 20)*i);
+                 Line(x0-3, y0+(GetMaxY div 20)*i, x0+3, y0+(GetMaxY div 20)*i);
+                 str(my+dy*i, s);
+                 OutTextXY(x0-60, y0+(GetMaxY div 20)*-i, s);
+                 str(-my+-1*dy*i, s);
+                 OutTextXY(x0-60, y0-(GetMaxY div 20)*-i, s);
                 end;
-                // Рисование графика
-                x1:=a;
-                cache := a;
-                while x1 <= b-0.001 do
-                begin
-                         SetColor(12);
-                        PutPixel(x0+round(x1*mx*scaleX), (y0-round(fx(x1)*my)), 12);
-                        
-                       if (((x1-cache) >= round(abs(b-a)/m2)) and gflag and (x1 <= b)) or ((x1 = a) and gflag)  then begin
-                       SetColor(2);
-                       writeln(y0-round(fx(x1)*my));
-                       Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
-                       cache := x1;
-                       end;
-                        x1:=x1+0.01;
-                        end;
-                if gflag then begin
-                SetColor(2);
-                Line(x0+round(x1*mx),(y0-round(fx(x1)*my)),x0+round(x1*mx),y0);
-                end;
+                // График
+                
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then graph(mx-1,my,scaleX,scaleY); // +zoomX
-                #77: if y1=1 then graph(mx+1,my,scaleX,scaleY); // -zoomX
-                #72: if y1=1 then graph(mx,my+1,scaleX,scaleY); // -zoomY
-                #80: if y1=1 then graph(mx,my-1,scaleX,scaleY); // +zoomY
-                #43: graph(mx+1,my+1,scaleX,scaleY);
-                #45: graph(mx-1,my-1,scaleX,scaleY);
-                #42:graph(mx,my,scaleX*2,scaleY);
-                #47:graph(mx,my,scaleX/2,scaleY);
+                #75: if y1=1 then graph(mx-1,my); // +zoomX
+                #77: if y1=1 then graph(mx+1,my); // -zoomX
+                #72: if y1=1 then graph(mx,my+10); // -zoomY
+                #80: if y1=1 then graph(mx,my-10); // +zoomY
+                #43: graph(mx+1,my+10);
+                #45: graph(mx-1,my-10);
                 #49: gflag := not gflag;
                 end;
         end;
@@ -241,7 +219,7 @@ begin
         y0:=GetMaxY div 2;
         x0:=GetMaxX div 2;
         gflag:=false;
-        graph(40,40,1,1);
+        graph(0,0);
 end;
 
 procedure printmenu;

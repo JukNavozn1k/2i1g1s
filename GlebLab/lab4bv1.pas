@@ -144,7 +144,7 @@ begin
         while winch <> #27 do
         begin
                 if dy <= 0 then dy := dy + 1;
-                if dx <= 0 then dx := dx + 1;
+                if dx <= 0 then dx := dx + 0.1;
                 ClearDevice;
                 // INFO hotkeys
                 OutTextXY(100,100,'zoom -x - RightArrow');
@@ -164,6 +164,7 @@ begin
                  OutTextXY(x0-20,y0+10,'0');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
+                // sx,sy -расстояние от центра до оси
                 sx := GetMaxX div 12;
                 sy := GetMaxY div 20;
                 for i := 1 to 10 do 
@@ -189,22 +190,23 @@ begin
                 y := 0;
                 while x < x0 do 
                 begin
-                     
+                      if round(y0-(y/(dy))) > 0 then begin
                       PutPixel(x0+round((sx/sy)*(x/(dx))),round(y0-(y/(dy))),12);
-                      PutPixel(x0-round((sx/sy)*(x/(dx))),round(y0+(y/(dy))),12);
+                      PutPixel(x0-round((sx/sy)*(x/(dx))),round(y0+(y/(dy))),12); 
+                      end;
                       x := x + 0.1;
-                      y := x; // y = kx + b, для задания основной функции поменять x на fx(x)
+                      y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)
                 end;
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then dx := dx -1; // +zoomX
-                #77: if y1=1 then dx := dx + 1; // -zoomX
+                #75: if y1=1 then dx := dx -0.1; // +zoomX
+                #77: if y1=1 then dx := dx + 0.1; // -zoomX
                 #72: if y1=1 then dy := dy + 1; // -zoomY
                 #80: if y1=1 then dy := dy -1; // +zoomY
-                #43:begin dx := dx + 1;dy:= dy+1; end;
-                #45: begin dx:=dx-1;dy:=dy-1;end;
+                #43:begin dx := dx + 0.1;dy:= dy+1; end;
+                #45: begin dx:=dx-0.1;dy:=dy-1;end;
                 #49: gflag := not gflag;
                 end;
         end;
@@ -214,13 +216,9 @@ end;
 procedure IntGraph;
 
 begin
-        // убрать на релизе
-        flag := true;
-        a := 0; b := 5; m2 := 10;
-        // всё что между этими строчками
         if flag=false then point1;
-        dx:=1;
-        dy:=1;
+        dx:=0.1;
+        dy:=10;
         gd:=detect;
         gm:=0;
         InitGraph(gd, gm, '');
@@ -304,4 +302,3 @@ begin
         until ch=#27;
         clrscr;
 end.
-// wooow

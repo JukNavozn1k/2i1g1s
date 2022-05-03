@@ -6,9 +6,15 @@ const
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,gd,gm,mx,my, lim: integer;
         ch,winch: char; 
+<<<<<<< HEAD
         h,a,b,m2,x1,E,RE,S1,S2,dx,dy: real; 
         flag,check,gflag: boolean;
         s,area_str,interval_string,absolute_error_str,relative_error_str,temp_str: string;
+=======
+        h,a,b,m2,x1,E,S1,S2,dx,dy: real; 
+        flag,check,gflag: boolean;
+        s,interval_string,temp_str: string;
+>>>>>>> 1474c27393b5f915462e3d2ba38c85040bfc9cca
 procedure graph(); forward;
 
 // Вывод функции
@@ -77,7 +83,15 @@ begin
                 write('Введите вторую точку (b > a ): ');
                 read(b);
                 gotoxy(10,y+i);
+<<<<<<< HEAD
                 i:=i+1;    
+=======
+                i:=i+1;
+                str(a:0:1,temp_str);
+                interval_string := 'Interval: [' + temp_str + ';';
+                str(b:0:1,temp_str);
+                interval_string := interval_string + temp_str + ']';
+>>>>>>> 1474c27393b5f915462e3d2ba38c85040bfc9cca
                 end;
                  gotoxy(10,y+i);
                 i:=i+1;
@@ -175,6 +189,8 @@ begin
                   OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2-40,area_str);
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,absolute_error_str);
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,relative_error_str);
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,'Absolute error:');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,'Relative error:');
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 40,interval_string);
                  // обозначение осей,точки 0
                  OutTextXY(GetMaxX-20,y0-20,'X');
@@ -220,7 +236,11 @@ begin
                        else Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
                        SetColor(12);
                       end;
+<<<<<<< HEAD
                       x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
+=======
+                      x := x + 0.1; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
+>>>>>>> 1474c27393b5f915462e3d2ba38c85040bfc9cca
                       y := fx(x); // функция, которая зависит от независимого x
                 end;
                  // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции

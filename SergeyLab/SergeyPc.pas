@@ -197,16 +197,17 @@ begin
                 while x < x0 do 
                 begin
                       // Рисование основной функции  
-                      if round(y0-(y/(dy))) > 0 then begin
+                      if (round(y0-sy*(y/(dy))) > 0)  then begin
                       PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX >= 0
                       PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
-                      // Рисование штриховки трогать можно,если хочеться
-                      if (x > a) and (x < b) and gflag then 
+                      end;
+                      // Рисование штриховки [a;b]
+                      if (x >= a-0.00001) and (x <= b+0.00001) and (x <= GetMaxX div sx) and gflag then 
                       begin
                        SetColor(2);
-                       Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
+                       if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),0)
+                       else Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
                        SetColor(12);
-                      end;
                       end;
                       x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
                       y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)

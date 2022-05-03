@@ -5,13 +5,13 @@ const
         n=5;
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,gd,gm,mx,my, lim: integer;
-        ch,winch: char;
-        h,a,b,m2,x1,E,S1,S2,dx,dy: real;
+        ch,winch: char; 
+        h,a,b,m2,x1,E,S1,S2,dx,dy: real; 
         flag,check,gflag: boolean;
         s,interval_string,temp_str: string;
 procedure graph(); forward;
 
-
+// Вывод функции
 procedure print_func;
 
 begin
@@ -48,7 +48,7 @@ begin
  LT := s;
 end;
 
-procedure point1;
+procedure point1; // Ввод данных, трогать не стоит. Чистяков сказал, что всё ОК (ТРОГАТЬ НЕ В КОЕМ СЛУЧАЕ НЕ РЕКОМЕДУЕТСЯ)
 
 var     i: integer;
 
@@ -104,7 +104,7 @@ begin
         flag:=true;
 end;
 
-procedure point2;
+procedure point2; // Вывод площади и погрешностей на экран консоли
 
 begin
         if flag <> true then
@@ -127,7 +127,7 @@ begin
         readln();
 end;
 
-procedure point4;
+procedure point4; // Вывод информации о программе (удивительно)
 
 begin
         clrscr;
@@ -149,6 +149,7 @@ begin
          
         while winch <> #27 do
         begin
+                // Проверка на Чистякова после + должен был стоять начальный dx или dy, но я не додумался ввести ещё 2 переменные, чтобы хранить их.
                 if dy <= 0 then dy := dy + 1;
                 if dx <= 0 then dx := dx + 1;
                 ClearDevice;
@@ -173,7 +174,7 @@ begin
                 // sx,sy -расстояние от центра до оси
                 sx := GetMaxX div 12;
                 sy := GetMaxY div 12;
-                for i := 1 to 10 do 
+                for i := 1 to 10 do  // to ..., где ... максимальное количество делений
                 begin
                 // Засечки,деления,скейл,сжатие,расстяжение OX
                 Line(x0+round(sx*i), y0-3, x0+round(sx*i), y0+3);
@@ -192,26 +193,25 @@ begin
                 end;
                 // График
                 SetColor(12);
-                x := 0;
-                y := 0;
+                x := 0;y := 0; // Стартовые координаты
                 while x < x0 do 
                 begin
                       // Рисование основной функции  
                       if round(y0-(y/(dy))) > 0 then begin
-                      PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12);
-                      PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); 
-                      // Рисование штриховки x0+round((sx/sy)*(x/(dx))) and gflag P.S x0 всё ломает
-                      if (x > a) and (x < b) and gflag then
+                      PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX >= 0
+                      PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
+                      // Рисование штриховки трогать можно,если хочеться
+                      if (x > a) and (x < b) and gflag then 
                       begin
-                     // x0+round(sx*(x/(dx))) round(y0-sy*(y/(dy)))
                        SetColor(2);
                        Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
                        SetColor(12);
                       end;
                       end;
-                      x := x + 0.01;
+                      x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
                       y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)
                 end;
+                 // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
@@ -232,15 +232,13 @@ procedure IntGraph;
 
 begin
        
-        if flag=false then point1;
-        dx:=1;
-        dy:=1;
-        gd:=detect;
-        gm:=0;
-        InitGraph(gd, gm, '');
-        y0:=GetMaxY div 2;
-        x0:=GetMaxX div 2;
-        gflag:=false;
+        if flag=false then point1; // проверка на чистякова тоже не стоит трогать
+        dx:=1;dy:=1;
+        // не трогать
+        gd:=detect;gm:=0;InitGraph(gd, gm, '');
+        // ---------------
+        y0:=GetMaxY div 2;x0:=GetMaxX div 2;// центр координат
+        gflag:=false; // Штриховка
         graph();
 end;
 

@@ -8,7 +8,7 @@ var     menu:array[1..n] of string;
         ch,winch: char;
         h,a,b,m2,x1,E,S1,S2,dx,dy: real;
         flag,check,gflag: boolean;
-        s: string;
+        s,interval_string,temp_str: string;
 procedure graph(); forward;
 
 
@@ -17,18 +17,20 @@ procedure print_func;
 begin
         write('f(x)=2x^3-2x^2+x');
 end;
+// Функция
 function fx(x: real): real;
 
 begin
         fx:=2*x*x*x - 2*x*x + x*x;
 end;
+// Первообразная функции
 function f(x: real): real;
 
 begin
         f:=(x*x*x*x)/2 - (x*x*x)*(2/3) + (x*x)/2;
 end;
 
-
+// Метод симпсона - метод вычисления площади
 function LT(a,b: real; n: integer): real;
 
  var
@@ -76,6 +78,10 @@ begin
                 read(b);
                 gotoxy(10,y+i);
                 i:=i+1;
+                str(a:0:1,temp_str);
+                interval_string := 'Interval: [' + temp_str + ';';
+                str(b:0:1,temp_str);
+                interval_string := interval_string + temp_str + ']';
                 end;
                  gotoxy(10,y+i);
                 i:=i+1;
@@ -144,7 +150,7 @@ begin
         while winch <> #27 do
         begin
                 if dy <= 0 then dy := dy + 1;
-                if dx <= 0 then dx := dx + 0.1;
+                if dx <= 0 then dx := dx + 1;
                 ClearDevice;
                 // INFO hotkeys
                 OutTextXY(100,100,'zoom -x - RightArrow');
@@ -157,7 +163,7 @@ begin
                  OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,'Absolute error:');
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,'Relative error:');
-                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 40,'Interval:');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 40,interval_string);
                  // обозначение осей,точки 0
                  OutTextXY(GetMaxX-20,y0-20,'X');
                  OutTextXY(x0+20,20,'Y');
@@ -166,7 +172,7 @@ begin
                 Line(x0, 20, x0, GetMaxY); //Oy
                 // sx,sy -расстояние от центра до оси
                 sx := GetMaxX div 12;
-                sy := GetMaxY div 20;
+                sy := GetMaxY div 12;
                 for i := 1 to 10 do 
                 begin
                 // Засечки,деления,скейл,сжатие,расстяжение OX
@@ -192,15 +198,10 @@ begin
                 begin
                       // Рисование основной функции  
                       if round(y0-(y/(dy))) > 0 then begin
-                      PutPixel(x0+round((sx/sy)*(x/(dx))),round(y0-(y/(dy))),12);
-                      PutPixel(x0-round((sx/sy)*(x/(dx))),round(y0+(y/(dy))),12); 
-                      // Рисование штриховки x0+round((sx/sy)*(x/(dx))) and gflag
-                     { if (x0+round((sx/sy)*(x/(dx))) >= a) and (x0+round((sx/sy)*(x/(dx))) <= b) then 
-                      begin
-                        SetColor(15);
-                        Line(x0+round((sx/sy)*(x/(dx))),y0,x0+round((sx/sy)*(x/(dx))),round(y0-(y/(dy))));
-                        SetColor(12);
-                      end; }
+                      PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12);
+                      PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); 
+                      // Рисование штриховки x0+round((sx/sy)*(x/(dx))) and gflag P.S x0 всё ломает
+                    
                       end;
                      
                       x := x + 0.1;
@@ -210,12 +211,12 @@ begin
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then dx := dx -0.1; // +zoomX
-                #77: if y1=1 then dx := dx + 0.1; // -zoomX
+                #75: if y1=1 then dx := dx -1; // +zoomX
+                #77: if y1=1 then dx := dx + 1; // -zoomX
                 #72: if y1=1 then dy := dy + 1; // -zoomY
                 #80: if y1=1 then dy := dy -1; // +zoomY
-                #43:begin dx := dx + 0.1;dy:= dy+1; end;
-                #45: begin dx:=dx-0.1;dy:=dy-1;end;
+                #43:begin dx := dx + 1;dy:= dy+1; end;
+                #45: begin dx:=dx-1;dy:=dy-1;end;
                 #49: gflag := not gflag;
                 end;
         end;
@@ -227,8 +228,8 @@ procedure IntGraph;
 begin
        
         if flag=false then point1;
-        dx:=0.1;
-        dy:=10;
+        dx:=1;
+        dy:=1;
         gd:=detect;
         gm:=0;
         InitGraph(gd, gm, '');

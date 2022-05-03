@@ -201,10 +201,15 @@ begin
                       PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12);
                       PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); 
                       // Рисование штриховки x0+round((sx/sy)*(x/(dx))) and gflag P.S x0 всё ломает
-                    
+                      if ((round(x/dx) >= a) and (round(x/dx) <= b)) and gflag then
+                      begin
+                     // x0+round(sx*(x/(dx))) round(y0-sy*(y/(dy)))
+                       SetColor(2);
+                       Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
+                       SetColor(12);
                       end;
-                     
-                      x := x + 0.1;
+                      end;
+                      x := x + 0.01;
                       y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)
                 end;
                 SetColor(15);

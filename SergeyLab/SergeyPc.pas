@@ -202,15 +202,15 @@ begin
                       PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
                       end;
                       // Рисование штриховки [a;b]
-                      if (x >= a-0.00001) and (x <= b+0.00001) and (x <= GetMaxX div sx) and gflag then 
+                      if (x >= a-0.00001) and (x <= b+0.00001) and gflag then 
                       begin
                        SetColor(2);
                        if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),0)
                        else Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
                        SetColor(12);
                       end;
-                      x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
-                      y := fx(x); // y = kx + b, для задания основной функции поменять x на fx(x)
+                      x := x + 0.1; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
+                      y := fx(x); // функция, которая зависит от независимого x
                 end;
                  // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
                 SetColor(15);

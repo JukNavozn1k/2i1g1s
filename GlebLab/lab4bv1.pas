@@ -255,7 +255,7 @@ begin
         gflag:=false; // Штриховка
         graph();
 end;
-
+// Вывод меню на экран консоли
 procedure printmenu;
 
 var i:integer;

@@ -15,19 +15,20 @@ procedure graph(); forward;
 procedure print_func;
 
 begin
-        write('f(x)=2x^3-2x^2+x');
+        write('f(x)=X^3+0*x^2+4*x+11');
 end;
+
 // Функция
 function fx(x: real): real;
 
 begin
-        fx:=2*x*x*x - 2*x*x + x*x;
+        fx:=x*x*x+4*x+11;
 end;
 // Первообразная функции
-function f(x: real): real;
+function f(l: real): real;
 
 begin
-        f:=(x*x*x*x)/2 - (x*x*x)*(2/3) + (x*x)/2;
+        f:=power(l,4)/4+2*power(l,2)+11*l;
 end;
 
 // Метод симпсона - метод вычисления площади
@@ -79,11 +80,11 @@ begin
                 gotoxy(10,y+i);
                 i:=i+1;    
                 end;
-                 gotoxy(10,y+i);
+                gotoxy(10,y+i);
                 i:=i+1;
                 check:=true
         until check=true;
-                write('Введите кол-во шагов (от 1 до 32767): ');
+                write('Введите кол-во шагов [1;32767]: ');
                 readln(m2);
         while (m2 <> trunc(m2)) or (m2 < 1) or (m2 > 32767) do
         begin
@@ -92,7 +93,7 @@ begin
                 writeln('Число должно быть целым и [1;32767]');
                 gotoxy(10,y+i);
                 i:=i+1;
-                write('Введите шаг (от 1 до 32767): ');
+                write('Введите кол-во шагов [1;32767]: ');
                 read(m2);
                 
         end;
@@ -109,9 +110,9 @@ begin
                  E:=S2-S1;
                  RE := abs(E/S1)*100;
                  str(E:0:2,temp_str);
-                 absolute_error_str := 'Absolute error: ' + temp_str;
+                 absolute_error_str := 'Абсолютная погрешность: ' + temp_str;
                  str(RE:0:2,temp_str);
-                 relative_error_str := 'Relative error: ' + temp_str + '%';
+                 relative_error_str := 'Относительная погрешность: ' + temp_str + '%';
                  str(S2:0:2,temp_str);
                  area_str := 'Sifted Area: ' + temp_str; 
                 flag:=true;
@@ -159,7 +160,7 @@ begin
         while winch <> #27 do
         begin
                 // Проверка на Чистякова после + должен был стоять начальный dx или dy, но я не додумался ввести ещё 2 переменные, чтобы хранить их.
-                if dy <= 0 then dy := dy + 1;
+                if dy <= 0 then dy := dy + 10;
                 if dx <= 0 then dx := dx + 1;
                 ClearDevice;
                 // INFO hotkeys
@@ -171,72 +172,75 @@ begin
                 OutTextXY(100,200,'Zoom x-axis and y-axis -> -');
                 OutTextXY(100,220,'Shade area -> 1');
                 // Вывод основной информации на график
-                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
-                  OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2-40,area_str);
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
+                OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2-40,area_str);
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,absolute_error_str);
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,relative_error_str);
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2,'Absolute error:');
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 20,'Relative error:');
                 OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 + 40,interval_string);
-                 // обозначение осей,точки 0
-                 OutTextXY(GetMaxX-20,y0-20,'X');
-                 OutTextXY(x0+20,20,'Y');
-                 OutTextXY(x0-20,y0+10,'0');
+                // обозначение осей,точки 0
+                OutTextXY(GetMaxX-20,y0-20,'X');
+                OutTextXY(x0+20,20,'Y');
+                OutTextXY(x0-20,y0+10,'0');
                 Line(0, y0, GetMaxX-20, y0); //Ox
                 Line(x0, 20, x0, GetMaxY); //Oy
-                // sx,sy -расстояние от центра до оси
-                sx := GetMaxX div 12;
-                sy := GetMaxY div 12;
-                for i := 1 to 10 do  // to ..., где ... максимальное количество делений
+                // sx,sy - расстояние от центра до оси
+                sx:=GetMaxX div 24;
+                sy:=GetMaxY div 24;
+                for i := 1 to 22 do  // to ..., где ... максимальное количество делений
                 begin
-                // Засечки,деления,скейл,сжатие,расстяжение OX
-                Line(x0+round(sx*i), y0-3, x0+round(sx*i), y0+3);
-                Line(x0-round(sx*i), y0-3, x0-round(sx*i), y0+3);
-                str((dx*i):0:2, s);
-                OutTextXY(x0+sx*i+5, y0+10, s);
-                str(-1*dx*i:0:2, s);
-                OutTextXY(x0-sx*i+5, y0+10, s);
-                // Засечки,деления,скейл,сжатие,расстяжение OY
-                 Line(x0-3, y0-sy*i, x0+3, y0-sy*i);
-                 Line(x0-3, y0+sy*i, x0+3, y0+sy*i);
-                 str(dy*i:0:0, s);
-                 OutTextXY(x0-60, y0+sy*-i, s);
-                 str(-1*dy*i:0:0, s);
-                 OutTextXY(x0-60, y0-sy*-i, s);
+                    // Засечки,деления,скейл,сжатие,расстяжение OX
+                    Line(x0+round(sx*i), y0-3, x0+round(sx*i), y0+3);
+                    Line(x0-round(sx*i), y0-3, x0-round(sx*i), y0+3);
+                    str((dx*i):0:2, s);
+                    OutTextXY(x0+sx*i+5, y0+10, s);
+                    str(-1*dx*i:0:2, s);
+                    OutTextXY(x0-sx*i+5, y0+10, s);
+                    // Засечки,деления,скейл,сжатие,расстяжение OY
+                    Line(x0-3, y0-sy*i, x0+3, y0-sy*i);
+                    Line(x0-3, y0+sy*i, x0+3, y0+sy*i);
+                    str(dy*i:0:0, s);
+                    OutTextXY(x0-60, y0+sy*-i, s);
+                    str(-1*dy*i:0:0, s);
+                    OutTextXY(x0-60, y0-sy*-i, s);
                 end;
                 // График
                 SetColor(12);
-                x := 0;y := 0; // Стартовые координаты
+                x:=0;
+                y:=0; // Стартовые координаты
                 while x < x0 do 
                 begin
-                      // Рисование основной функции  
-                      if (round(y0-sy*(y/(dy))) > 0)  then begin
-                      PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX >= 0
-                      PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
-                      end;
-                      // Рисование штриховки [a;b]
-                      if (x >= a-0.00001) and (x <= b+0.00001) and gflag then 
-                      begin
-                       SetColor(2);
-                       if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),0)
-                       else Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
-                       SetColor(12);
-                      end;
-                      x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
-                      y := fx(x); // функция, которая зависит от независимого x
+                    // Рисование основной функции  
+                    if (round(y0-sy*(y/(dy))) > 0) then
+                    begin
+                        PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX >= 0
+                        PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
+                    end;
+                    // Рисование штриховки [a;b]
+                    if (x >= a-0.00001) and (x <= b+0.00001) and gflag then 
+                    begin
+                        SetColor(2);
+                        if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),0)
+                    else 
+                        Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
+                        SetColor(12);
+                    end;
+                    x:=x+0.01; // Шаг рисования, чем больше шаг, тем болше лагает, но тем более красивое
+                    y:=fx(x); // функция, которая зависит от независимого x
                 end;
                  // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
                 SetColor(15);
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then dx := dx -1; // +zoomX
-                #77: if y1=1 then dx := dx + 1; // -zoomX
-                #72: if y1=1 then dy := dy + 1; // -zoomY
-                #80: if y1=1 then dy := dy -1; // +zoomY
-                #43:begin dx := dx + 1;dy:= dy+1; end;
-                #45: begin dx:=dx-1;dy:=dy-1;end;
-                #49: gflag := not gflag;
+                #75: if y1=1 then dx:=dx-1; // +zoomX
+                #77: if y1=1 then dx:=dx+1; // -zoomX
+                #72: if y1=1 then dy:=dy+10; // -zoomY
+                #80: if y1=1 then dy:=dy-10; // +zoomY
+                #43: begin dx:=dx+1; dy:=dy+1; end;
+                #45: begin dx:=dx-1;dy:=dy-1; end;
+                #49: gflag:=not gflag;
                 end;
         end;
         CloseGraph;
@@ -246,12 +250,13 @@ procedure IntGraph;
 
 begin
        
-        if flag=false then point1; // проверка на чистякова тоже не стоит трогать
-        dx:=1;dy:=1;
-        // не трогать
-        gd:=detect;gm:=0;InitGraph(gd, gm, '');
-        // ---------------
-        y0:=GetMaxY div 2;x0:=GetMaxX div 2;// центр координат
+        if flag=false then point1;
+        dx:=1;dy:=10;
+        gd:=detect;
+        gm:=0;
+        InitGraph(gd, gm, '');
+        y0:=GetMaxY - 50;
+        x0:=GetMaxX div 10;// центр координат
         gflag:=false; // Штриховка
         graph();
 end;

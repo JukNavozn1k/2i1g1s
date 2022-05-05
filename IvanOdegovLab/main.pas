@@ -52,34 +52,34 @@ begin
         print_func;
         repeat
                 gotoxy(10,y);
-                writeln('Ввод данных');
+                writeln(' ');
                 gotoxy(10,y+i);
                 i:=i+1;
-                write('Введите первую точку: ');
+                write('  : ');
                 read(a);
                 if (a < -1.64240517074131) then a:=-1.64240517074131;
                 gotoxy(10,y+i);
                 i:=i+1;
-                write('Введите вторую точку: ');
+                write('  : ');
                 read(b);
                 if (b < -1.64240517074131) then b:=-1.64240517074131;
                 gotoxy(10,y+i);
                 i:=i+1;
                 if b < a then
-                        writeln('Первое число должно быть меньше второго')
+                        writeln('     ')
                 else
                         check:=true
         until check=true;
-                write('Введите кол-во шагов (от 1 до 32767): ');
+                write(' -  ( 1  32767): ');
                 readln(m2);
         while (m2 <> trunc(m2)) or (m2 < 1) do
         begin
                 gotoxy(10,y+i);
                 i:=i+1;
-                writeln('Число должно быть целым и больше 0!');
+                writeln('      0!');
                 gotoxy(10,y+i);
                 i:=i+1;
-                write('Введите шаг (от 1 до 32767): ');
+                write('  ( 1  32767): ');
                 read(m2);
         end;
         m:=trunc(m2);
@@ -97,14 +97,14 @@ begin
         E:=S1-S2;
         print_func;
         gotoxy(10,5);
-        write('Результат: ');
+        write(': ');
         writeln(S2:5:2);
         gotoxy(10,6);
-        writeln('Абсолютная погрешность: ', E:5:2);
+        writeln(' : ', E:5:2);
         gotoxy(10,7);
-        writeln('Относительная прогрешность: ', (E/S1)*100:5:0, '%');
+        writeln(' : ', (E/S1)*100:5:0, '%');
         gotoxy(10,8);
-        write('Нажмите любую клавишу для выхода в главное меню');
+        write('       ');
         readln();
 end;
 
@@ -113,9 +113,9 @@ procedure point4;
 begin
         clrscr;
         gotoxy(10,5);
-        writeln('Программа вычисляет площадь фигуры выше y=0 ограниченную кривой и выводит её график на координатную плосость с возможностью его масштабирования как по отдельным осям, так и всем вместе.');
+        writeln('     y=0                 ,    .');
         gotoxy(10,6);
-        write('Нажмите клавишу <Enter> для выходв в главное меню ');
+        write('  <Enter>      ');
         readln;
 end;
 
@@ -144,7 +144,7 @@ begin
                 Line(x0, 20, x0, GetMaxY); //Oy
                 for i:=1 to 100 do
                 begin
-                        // P.S сделать ограничения нормальные (метод научного тыка)
+                        // P.S    (  )
                         Line(x0+round(mx*i), y0-3, x0+round(mx*i), y0+3);
                         Line(x0-3, y0-round(my*i*10), x0+3, y0-round(my*i*10));
                         str(dx*i, s);
@@ -177,10 +177,10 @@ begin
                 winch:=wincrt.readkey;
                 if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then graph(mx-1,my); // лево
-                #77: if y1=1 then graph(mx+1,my); // право
-                #72: if y1=1 then graph(mx,my+1); // вверх
-                #80: if y1=1 then graph(mx,my-1); // вниз
+                #75: if y1=1 then graph(mx-1,my); // 
+                #77: if y1=1 then graph(mx+1,my); // 
+                #72: if y1=1 then graph(mx,my+1); // 
+                #80: if y1=1 then graph(mx,my-1); // 
                 #43: graph(mx+1,my+1);
                 #45: graph(mx-1,my-1);
                 #49: gflag := not gflag;
@@ -223,11 +223,11 @@ begin
 end;
 
 begin
-        menu[1]:='Ввод данных';
-        menu[2]:='Результат вычислений';
-        menu[3]:='График';
-        menu[4]:='О программе';
-        menu[5]:='Выход';
+        menu[1]:=' ';
+        menu[2]:=' ';
+        menu[3]:='';
+        menu[4]:=' ';
+        menu[5]:='';
         point:=1;
         x:=10;
         y:=5;

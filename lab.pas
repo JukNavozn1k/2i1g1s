@@ -11,21 +11,17 @@ var menu:array[1..n] of string;
     s,area_str,interval_string,absolute_error_str,relative_error_str,temp_str: string;
 procedure graph(); forward;
 
-// Вывод функции
 procedure print_func;
 
 begin
         write('f(x)=X^3+0*x^2+4*x+11');
 end;
 
-// Функция
 function fx(x: real): real;
 
 begin
     fx:=x*x*x+4*x+11;
 end;
-
-// Первообразная функции
 
 function f(l: real): real;
 
@@ -33,7 +29,6 @@ begin
     f:=power(l,4)/4+2*power(l,2)+11*l;
 end;
 
-// Метод симпсона - метод вычисления площади
 function LT(a,b: real; m: integer): real;
 
 var     i: integer;
@@ -51,7 +46,7 @@ begin
     LT:=s*h;
 end;
 
-procedure point1; // Ввод данных, трогать не стоит. Чистяков сказал, что всё ОК (ТРОГАТЬ НЕ В КОЕМ СЛУЧАЕ НЕ РЕКОМЕДУЕТСЯ)
+procedure point1;
 
 var     i: integer;
 
@@ -78,10 +73,9 @@ begin
             while (b < a) do begin
                 write('Введите вторую точку (b > a ): ');
                 read(b);
+                gotoxy(10,y+i);
                 i:=i+1;    
             end;
-            gotoxy(10,y+i);
-            i:=i+1;
             check:=true
         until check=true;
             write('Введите кол-во шагов [1;32767]: ');
@@ -97,12 +91,10 @@ begin
             read(m2);  
         end;
         m:=trunc(m2);
-            // СТРОКА ИНТЕРВАЛА
             str(a:0:1,temp_str);
             interval_string:='Interval: [' + temp_str + ';';
             str(b:0:1,temp_str);
             interval_string:=interval_string + temp_str + ']';
-            // ПОДСЧЁТ ПОГРЕШНОСТЕЙ, ВЫВОД В СТРОКУ
             S1:=f(b)-f(a);
             S2:=LT(a,b,m);
             E:=S2-S1;
@@ -116,7 +108,7 @@ begin
     flag:=true;
 end;
 
-procedure point2; // Вывод площади и погрешностей на экран консоли
+procedure point2;
 
 begin
     if flag <> true then
@@ -135,14 +127,14 @@ begin
     readln();
 end;
 
-procedure point4; // Вывод информации о программе (удивительно)
+procedure point4;
 
 begin
     clrscr;
     gotoxy(10,5);
     writeln('Программа вычисляет площадь фигуры выше y=0 ограниченную кривой и выводит её график на координатную плосость с возможностью его масштабирования как по отдельным осям, так и всем вместе.');
     gotoxy(10,6);
-    write('Нажмите клавишу <Enter> для выходв в главное меню ');
+    write('Нажмите любую клавишу для выходв в главное меню ');
     readln;
 end;
 
@@ -156,45 +148,38 @@ begin
     winch:=' ';   
     while winch <> #27 do
     begin
-        // Проверка на Чистякова после + должен был стоять начальный dx или dy, но я не додумался ввести ещё 2 переменные, чтобы хранить их.
         if dy <= 0 then dy := dy + 10;
         if dx <= 0 then dx := dx + 1;
         ClearDevice;
-        // INFO hotkeys
-        OutTextXY(100,100,'Zoom out x-axis -> RightArrow');
-        OutTextXY(100,120,'Zoom x-axis -> LeftArrow');
-        OutTextXY(100,140,'Zoom out y-axis -> UpArrow');
-        OutTextXY(100,160,'Zoom y-axis -> DownArrow');
-        OutTextXY(100,180,'Zoom out x-axis and y-axis -> +');
-        OutTextXY(100,200,'Zoom x-axis and y-axis -> -');
-        OutTextXY(100,220,'Shade area -> 1');
-        // Вывод основной информации на график
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5 - 20,'f(x)=X^3+0*x^2+4*x+11');
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5-40,area_str);
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5,absolute_error_str);
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5 + 20,relative_error_str);
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5,'Absolute error:');
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5 + 20,'Relative error:');
-        OutTextXY(GetMaxX-200,(GetMaxY) div 5 + 40,interval_string);
-        // обозначение осей,точки 0
+        OutTextXY(GetMaxX-250,100,'Zoom out x-axis -> RightArrow');
+        OutTextXY(GetMaxX-250,120,'Zoom x-axis -> LeftArrow');
+        OutTextXY(GetMaxX-250,140,'Zoom out y-axis -> UpArrow');
+        OutTextXY(GetMaxX-250,160,'Zoom y-axis -> DownArrow');
+        OutTextXY(GetMaxX-250,180,'Zoom out x-axis and y-axis -> +');
+        OutTextXY(GetMaxX-250,200,'Zoom x-axis and y-axis -> -');
+        OutTextXY(GetMaxX-250,220,'Shade area -> 1');
+        OutTextXY(GetMaxX-250,240,'f(x)=X^3+0*x^2+4*x+11');
+        OutTextXY(GetMaxX-250,260,area_str);
+        OutTextXY(GetMaxX-250,280,absolute_error_str);
+        OutTextXY(GetMaxX-250,300,relative_error_str);
+        OutTextXY(GetMaxX-250,320,'Absolute error:');
+        OutTextXY(GetMaxX-250,340,'Relative error:');
+        OutTextXY(GetMaxX-250,360,interval_string);
         OutTextXY(GetMaxX-20,y0-20,'X');
         OutTextXY(x0+20,20,'Y');
         OutTextXY(x0-20,y0+10,'0');
         Line(0, y0, GetMaxX-20, y0); //Ox
         Line(x0, 20, x0, GetMaxY); //Oy
-        // sx,sy - расстояние от центра до оси
         sx:=GetMaxX div 24;
         sy:=GetMaxY div 24;
-        for i := 1 to 22 do  // to ..., где ... максимальное количество делений
+        for i := 1 to 22 do
         begin
-            // Засечки,деления,скейл,сжатие,расстяжение OX
             Line(x0+round(sx*i), y0-3, x0+round(sx*i), y0+3);
             Line(x0-round(sx*i), y0-3, x0-round(sx*i), y0+3);
             str((dx*i):0:0, s);
             OutTextXY(x0+sx*i+5, y0+10, s);
             str(-1*dx*i:0:0, s);
             OutTextXY(x0-sx*i+5, y0+10, s);
-            // Засечки,деления,скейл,сжатие,расстяжение OY
             Line(x0-3, y0-sy*i, x0+3, y0-sy*i);
             Line(x0-3, y0+sy*i, x0+3, y0+sy*i);
             str(dy*i:0:0, s);
@@ -202,19 +187,15 @@ begin
             str(-1*dy*i:0:0, s);
             OutTextXY(x0-60, y0-sy*-i, s);
         end;
-        // График
         SetColor(12);
         x:=-1.64240517074131;
-        y:=0; // Стартовые координаты
+        y:=0;
         while x < x0 do 
-        begin
-            // Рисование основной функции  
+        begin 
             if (round(y0-sy*(y/(dy))) > -1.64240517074131) then
             begin
-                PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX >= 0
-                //PutPixel(x0-round(sx*(x/(dx))),round(y0+sy*(y/(dy))),12); // График нечётной функции с переводом пикселей в координаты OX <= 0
+                PutPixel(x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))),12);
             end;
-            // Рисование штриховки [a;b]
             if (x >= a-0.00001) and (x <= b+0.00001) and gflag then 
             begin
                 SetColor(2);
@@ -223,10 +204,9 @@ begin
                 Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
                 SetColor(12);
             end;
-            x:=x+0.01; // Шаг рисования, чем больше шаг, тем болше лагает, но тем более красивое
-            y:=fx(x); // функция, которая зависит от независимого x
+            x:=x+0.01;
+            y:=fx(x);
         end;
-        // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
         SetColor(15);
         winch:=wincrt.readkey;
         if winch=#0 then y1:=1;
@@ -235,8 +215,8 @@ begin
         #77: if y1=1 then dx:=dx+1; // -zoomX
         #72: if y1=1 then dy:=dy+10; // -zoomY
         #80: if y1=1 then dy:=dy-10; // +zoomY
-        #43: begin dx:=dx+1; dy:=dy+1; end;
-        #45: begin dx:=dx-1;dy:=dy-1; end;
+        #43: begin dx:=dx+1; dy:=dy+1; end; // +zoomBoth
+        #45: begin dx:=dx-1;dy:=dy-1; end; // -zoomBoth
         #49: gflag:=not gflag;
         end;
     end;
@@ -253,8 +233,8 @@ begin
     gm:=0;
     InitGraph(gd, gm, '');
     y0:=GetMaxY - 50;
-    x0:=GetMaxX div 10;// центр координат
-    gflag:=false; // Штриховка
+    x0:=GetMaxX div 10;
+    gflag:=false;
     graph();
 end;
 

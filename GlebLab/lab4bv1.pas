@@ -5,9 +5,9 @@ const
         n=5;
 var     menu:array[1..n] of string;
         point,x,y,m,d,x0,y0,i,gd,gm,mx,my, lim: integer;
-        ch,winch: char; 
+        ch,winch,tmpW: char; 
         h,a,b,m2,x1,E,RE,S1,S2,dx,dy: real; 
-        flag,check,gflag: boolean;
+        flag,check,gflag,isGood: boolean;
         s,area_str,interval_string,absolute_error_str,relative_error_str,temp_str: string;
 procedure graph(); forward;
 
@@ -64,8 +64,8 @@ begin
                 gotoxy(10,y+i);
                 i:=i+1;
                 a := -1;
-                while a < 0 do begin
-                write('Введите первую точку (a >= 0): ');
+                while (a < 0) or (a >= 10) do begin
+                write('Введите первую точку (a >= 0) и (a < 10): ');
                 read(a);
                 gotoxy(10,y+i);
                 i:=i+1;
@@ -155,24 +155,24 @@ var y1,m,sx,sy: integer;
     cache,x,y,step: real;
 begin
         winch:=' ';
-         
-        while winch <> #27 do
+        tmpW := ' ';
+        
+        while isGood do
         begin
                 // ограничения по зуму
                 if dy <= 10 then dy := dy + 10;
                 if dx <= 0 then dx := dx + 1;
                 if dy >= 500 then dy := dy - 10;
-                if dx >= 5 then dx := dx -1;
+                if dx >= 5 then dx := dx -1; 
                 ClearDevice;
          
-                OutTextXY(100,120,'Zoom out x-axis -> 2');
-                OutTextXY(100,100,'Zoom x-axis -> 1');
-                OutTextXY(100,140,'Zoom out y-axis -> 3');
-                OutTextXY(100,160,'Zoom y-axis -> 4');
-                OutTextXY(100,200,'Zoom out x-axis and y-axis -> 6');
-                OutTextXY(100,220,'Zoom x-axis and y-axis -> 7');
-                OutTextXY(100,180,'Shade area -> 5');
-                 OutTextXY(100,240,'ESC -> close graph');
+                OutTextXY(100,100,'Zoom out x-axis -> RightArrow');
+                OutTextXY(100,120,'Zoom x-axis -> LeftArrow');
+                OutTextXY(100,140,'Zoom out y-axis -> UpArrow');
+                OutTextXY(100,160,'Zoom y-axis -> DownArrow');
+                OutTextXY(100,180,'Zoom out x-axis and y-axis -> +');
+                OutTextXY(100,200,'Zoom x-axis and y-axis -> -');
+                OutTextXY(100,220,'Shade area -> 1');
                 // Вывод основной информации на график
                  OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
                   OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2-40,area_str);
@@ -236,17 +236,28 @@ begin
                 end;
                  // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
                 SetColor(15);
-                winch:=wincrt.readkey;
+                tmpW:=wincrt.readkey;
+                if tmpW = #0 then begin
+                winch := wincrt.readkey;
                 case winch of
-                '1':  dx := dx -1; // +zoomX
-                '2': dx := dx + 1; // -zoomX
-                '3': dy := dy + 10; // -zoomY
-                '4':  dy := dy -10; // +zoomY
-                '5': gflag := not gflag; // shade
-                '6':begin dx := dx + 1;dy:= dy+10; end;
-                '7': begin dx:=dx-1;dy:=dy-10;end;
-                
+                #75:  dx := dx -1; // +zoomX
+                #77:  dx := dx + 1; // -zoomX
+                #72:  dy := dy + 10; // -zoomY
+                #80: dy := dy -10; // +zoomY
                 end;
+                end
+                else 
+                begin
+                case tmpW of
+                 '+':begin dx := dx + 1;dy:= dy+10; end;
+                '-': begin dx:=dx-1;dy:=dy-10;end;
+                '1': gflag := not gflag;
+                #27: isGood := false;
+                end;
+                 end;
+             
+                
+               
         end;
         CloseGraph;
 end;
@@ -257,14 +268,14 @@ begin
        
         if flag=false then point1; 
         dx:=1;dy:=10;
-        
+        isGood := true;
         gd:=detect;gm:=0;InitGraph(gd, gm, '');
         // ---------------
         y0:=GetMaxY div 2;x0:=GetMaxX div 2;// центр координат
         gflag:=false; // Штриховка
         graph();
 end;
-// Вывод меню на экран консоли
+
 procedure printmenu;
 
 var i:integer;

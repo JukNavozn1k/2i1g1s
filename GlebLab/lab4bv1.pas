@@ -165,13 +165,14 @@ begin
                 if dx >= 5 then dx := dx -1;
                 ClearDevice;
          
-                OutTextXY(100,100,'Zoom out x-axis -> RightArrow');
-                OutTextXY(100,120,'Zoom x-axis -> LeftArrow');
-                OutTextXY(100,140,'Zoom out y-axis -> UpArrow');
-                OutTextXY(100,160,'Zoom y-axis -> DownArrow');
-                OutTextXY(100,180,'Zoom out x-axis and y-axis -> +');
-                OutTextXY(100,200,'Zoom x-axis and y-axis -> -');
-                OutTextXY(100,220,'Shade area -> 1');
+                OutTextXY(100,120,'Zoom out x-axis -> 2');
+                OutTextXY(100,100,'Zoom x-axis -> 1');
+                OutTextXY(100,140,'Zoom out y-axis -> 3');
+                OutTextXY(100,160,'Zoom y-axis -> 4');
+                OutTextXY(100,200,'Zoom out x-axis and y-axis -> +');
+                OutTextXY(100,220,'Zoom x-axis and y-axis -> -');
+                OutTextXY(100,180,'Shade area -> 5');
+                 OutTextXY(100,240,'ESC -> close graph');
                 // Вывод основной информации на график
                  OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2 - 20,'f(x)=2x^3-2x^2+x');
                   OutTextXY((GetMaxX+x0)div 2,(GetMaxY+y0)div 2-40,area_str);
@@ -236,15 +237,14 @@ begin
                  // KEY-BINDS - клавиши, необходимые для взаимодействия пользователя с графиком функции
                 SetColor(15);
                 winch:=wincrt.readkey;
-                if winch=#0 then y1:=1;
                 case winch of
-                #75: if y1=1 then dx := dx -1; // +zoomX
-                #77: if y1=1 then dx := dx + 1; // -zoomX
-                #72: if y1=1 then dy := dy + 10; // -zoomY
-                #80: if y1=1 then dy := dy -10; // +zoomY
-                #43:begin dx := dx + 1;dy:= dy+10; end;
-                #45: begin dx:=dx-1;dy:=dy-10;end;
-                #49: gflag := not gflag;
+                '1':  dx := dx -1; // +zoomX
+                '2': dx := dx + 1; // -zoomX
+                '3': dy := dy + 10; // -zoomY
+                '4':  dy := dy -10; // +zoomY
+                '+':begin dx := dx + 1;dy:= dy+10; end;
+                '-': begin dx:=dx-1;dy:=dy-10;end;
+                '5': gflag := not gflag;
                 end;
         end;
         CloseGraph;

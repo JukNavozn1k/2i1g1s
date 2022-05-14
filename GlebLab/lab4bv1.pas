@@ -48,7 +48,7 @@ begin
  LT := s;
 end;
 
-procedure point1; // Ввод данных, трогать не стоит. Чистяков сказал, что всё ОК (ТРОГАТЬ НЕ В КОЕМ СЛУЧАЕ НЕ РЕКОМЕДУЕТСЯ)
+procedure point1; 
 
 var     i: integer;
 
@@ -73,8 +73,8 @@ begin
                 gotoxy(10,y+i);
                 i:=i+1;
                 b := -1;
-                while (b <= a) do begin
-                write('Введите вторую точку (b > a ): ');
+                while (b <= a) or (b >10) do begin
+                write('Введите вторую точку (b > a ) и (b <= 10): ');
                 read(b);
                 gotoxy(10,y+i);
                 i:=i+1;    
@@ -152,17 +152,19 @@ end;
 procedure graph();
 
 var y1,m,sx,sy: integer;
-    cache,x,y: real;
+    cache,x,y,step: real;
 begin
         winch:=' ';
          
         while winch <> #27 do
         begin
-                // Проверка на Чистякова после + должен был стоять начальный dx или dy, но я не додумался ввести ещё 2 переменные, чтобы хранить их.
-                if dy <= 0 then dy := dy + 1;
+                // ограничения по зуму
+                if dy <= 10 then dy := dy + 10;
                 if dx <= 0 then dx := dx + 1;
+                if dy >= 500 then dy := dy - 10;
+                if dx >= 5 then dx := dx -1;
                 ClearDevice;
-                // INFO hotkeys
+         
                 OutTextXY(100,100,'Zoom out x-axis -> RightArrow');
                 OutTextXY(100,120,'Zoom x-axis -> LeftArrow');
                 OutTextXY(100,140,'Zoom out y-axis -> UpArrow');
@@ -207,6 +209,7 @@ begin
                 // График
                 SetColor(12);
                 x := 0;y := 0; // Стартовые координаты
+                step := x;
                 while x < x0 do 
                 begin
                       // Рисование основной функции  
@@ -217,9 +220,14 @@ begin
                       // Рисование штриховки [a;b]
                       if (x >= a-0.00001) and (x <= b+0.00001) and gflag then 
                       begin
-                       SetColor(2);
-                       if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),0)
+                         SetColor(2);
+                        if (x- step > 0.25) then begin
+                       if (round(y0-sy*(y/(dy))) < 0) then Line(x0+round(sx*((x)/(dx))),y0,x0+round(sx*(x/(dx))),0)
                        else Line(x0+round(sx*(x/(dx))),y0,x0+round(sx*(x/(dx))),round(y0-sy*(y/(dy))));
+                       step := x;
+                       end;
+                       if (round(y0-sy*(fx(b)/(dy))) < 0) then Line(x0+round(sx*((b)/(dx))),y0,x0+round(sx*(b/(dx))),0)
+                       else Line(x0+round(sx*(b/(dx))),y0,x0+round(sx*(b/(dx))),round(y0-sy*(fx(b)/(dy))));
                        SetColor(12);
                       end;
                       x := x + 0.01; // Шаг рисования, чем больше тем болше лагает,но тем более красивое
@@ -232,10 +240,10 @@ begin
                 case winch of
                 #75: if y1=1 then dx := dx -1; // +zoomX
                 #77: if y1=1 then dx := dx + 1; // -zoomX
-                #72: if y1=1 then dy := dy + 1; // -zoomY
-                #80: if y1=1 then dy := dy -1; // +zoomY
-                #43:begin dx := dx + 1;dy:= dy+1; end;
-                #45: begin dx:=dx-1;dy:=dy-1;end;
+                #72: if y1=1 then dy := dy + 10; // -zoomY
+                #80: if y1=1 then dy := dy -10; // +zoomY
+                #43:begin dx := dx + 1;dy:= dy+10; end;
+                #45: begin dx:=dx-1;dy:=dy-10;end;
                 #49: gflag := not gflag;
                 end;
         end;
@@ -246,9 +254,9 @@ procedure IntGraph;
 
 begin
        
-        if flag=false then point1; // проверка на чистякова тоже не стоит трогать
-        dx:=1;dy:=1;
-        // не трогать
+        if flag=false then point1; 
+        dx:=1;dy:=10;
+        
         gd:=detect;gm:=0;InitGraph(gd, gm, '');
         // ---------------
         y0:=GetMaxY div 2;x0:=GetMaxX div 2;// центр координат

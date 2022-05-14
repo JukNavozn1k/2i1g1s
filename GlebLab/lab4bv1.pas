@@ -169,8 +169,8 @@ begin
                 OutTextXY(100,100,'Zoom x-axis -> 1');
                 OutTextXY(100,140,'Zoom out y-axis -> 3');
                 OutTextXY(100,160,'Zoom y-axis -> 4');
-                OutTextXY(100,200,'Zoom out x-axis and y-axis -> +');
-                OutTextXY(100,220,'Zoom x-axis and y-axis -> -');
+                OutTextXY(100,200,'Zoom out x-axis and y-axis -> 6');
+                OutTextXY(100,220,'Zoom x-axis and y-axis -> 7');
                 OutTextXY(100,180,'Shade area -> 5');
                  OutTextXY(100,240,'ESC -> close graph');
                 // Вывод основной информации на график
@@ -242,9 +242,10 @@ begin
                 '2': dx := dx + 1; // -zoomX
                 '3': dy := dy + 10; // -zoomY
                 '4':  dy := dy -10; // +zoomY
-                '+':begin dx := dx + 1;dy:= dy+10; end;
-                '-': begin dx:=dx-1;dy:=dy-10;end;
-                '5': gflag := not gflag;
+                '5': gflag := not gflag; // shade
+                '6':begin dx := dx + 1;dy:= dy+10; end;
+                '7': begin dx:=dx-1;dy:=dy-10;end;
+                
                 end;
         end;
         CloseGraph;
